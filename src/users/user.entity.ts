@@ -1,5 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
+
 @ObjectType()
 export class User {
   @Field(() => ID)
@@ -11,6 +16,12 @@ export class User {
   @Field(() => String)
   password: string
 
+  @Field(() => [String])
+  roles: string[]
+
   @Field(() => String, { nullable: true })
   accessToken?: string
+
+  @Field(() => Date, { nullable: true })
+  iat?: Date
 }

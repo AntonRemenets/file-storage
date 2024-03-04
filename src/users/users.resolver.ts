@@ -9,7 +9,7 @@ export class UsersResolver {
 
   // Регистрация нового пользователя
   @Mutation(() => User, { name: 'RegisterUser' })
-  async newUser(@Args('registerUserInput') dto: CreateUserDto) {
+  async newUser(@Args('registerUserInput') dto: CreateUserDto): Promise<User> {
     return await this.users.registerNewUser(dto)
   }
 

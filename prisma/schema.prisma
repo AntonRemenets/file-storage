@@ -14,11 +14,13 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
   password    String
-  createdAt   DateTime @default(now()) @map("created_at")
-  accessToken String   @default("") @map("access_token")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  roles       String[]
+  accessToken String?   @map("access_token")
+  iat         DateTime? @map("expires_at")
   files       File[]
 
   @@map("users")
