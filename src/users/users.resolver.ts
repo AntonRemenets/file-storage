@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create.dto'
 export class UsersResolver {
   constructor(private readonly users: UsersService) {}
 
+  // Регистрация нового пользователя
   @Mutation(() => User, { name: 'RegisterUser' })
   async newUser(@Args('registerUserInput') dto: CreateUserDto) {
     return await this.users.registerNewUser(dto)
