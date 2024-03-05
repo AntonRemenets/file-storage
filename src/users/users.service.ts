@@ -18,7 +18,7 @@ export class UsersService {
   // 2. Валидируем данные
   // 3. Прверяем на лимит создания ползователей
   // 4. Сохраняем пользователя в базе данных
-  async registerNewUser(dto: CreateUserDto): Promise<User> {
+  async saveNewUser(dto: CreateUserDto): Promise<User> {
     if (await this.getUserByEmail(dto.email)) {
       throw new BadRequestException(
         'Пользователь с такой почтой уже зарегистрирован',
