@@ -8,6 +8,7 @@ import { CreateUserDto } from './dto/create.dto'
 import * as bcrypt from 'bcrypt'
 import { genSaltSync } from 'bcrypt'
 import { Role, User } from './user.entity'
+import { UserPayload } from '../auth/entity/user-payload.entity'
 
 @Injectable()
 export class UsersService {
@@ -18,7 +19,7 @@ export class UsersService {
   // 2. Валидируем данные
   // 3. Прверяем на лимит создания ползователей
   // 4. Сохраняем пользователя в базе данных
-  async saveNewUser(dto: CreateUserDto): Promise<User> {
+  async saveNewUser(dto: CreateUserDto): Promise<UserPayload> {
     if (await this.getUserByEmail(dto.email)) {
       throw new BadRequestException(
         'Пользователь с такой почтой уже зарегистрирован',
