@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { UsersService } from '../users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { CreateUserDto } from '../users/dto/create.dto'
+import { User } from '../users/user.entity'
+import { AccessToken } from './entity/token.entity'
+import { compareSync } from 'bcrypt'
 
 @Injectable()
 export class AuthService {
@@ -10,21 +13,34 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
-  async registerNewUser(dto: CreateUserDto) {
-    const user = await this.users.saveNewUser(dto)
-    user.accessToken = this.generateAccessToken(user)
-
-    return user
+  async registerNewUser(dto: CreateUserDto): Promise<AccessToken> {
+    const user: User = await this.users.saveNewUser(dto)
+    if (user) {
+      const accessToken: string = this.generateAccessToken(user)
+      return { accessToken }
+    } else {
+      return null
+    }
   }
 
-  private generateAccessToken(user) {
-    const accessToken =
+  async loginUser(dto: CreateUserDto): Promise<AccessToken> {
+    const user: User = await this.users.getUserByEmail(dto.email)
+    if (!user || !compareSync(dto.password, user.password)) {
+      throw new UnauthorizedException('Неправильное имя или пароль')
+    }
+    const accessToken: string = this.generateAccessToken(user)
+
+    return { accessToken }
+  }
+
+  private generateAccessToken(user: User): string {
+    return (
       'Bearer ' +
       this.jwt.sign({
         id: user.id,
         email: user.email,
+        roles: user.roles,
       })
-
-    return accessToken
+    )
   }
 }

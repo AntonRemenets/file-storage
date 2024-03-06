@@ -2,12 +2,8 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserPayload {
-  id: ID!
-  email: String!
-  password: String!
-  roles: [String!]!
-  accessToken: String
+type AccessToken {
+  accessToken: String!
 }
 
 type Query {
@@ -15,7 +11,8 @@ type Query {
 }
 
 type Mutation {
-  RegisterUser(RegisterUserInput: CreateUserDto!): UserPayload!
+  RegisterUser(RegisterUserInput: CreateUserDto!): AccessToken!
+  LoginUser(LoginUserInput: CreateUserDto!): AccessToken!
 }
 
 input CreateUserDto {

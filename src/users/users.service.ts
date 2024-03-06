@@ -47,7 +47,7 @@ export class UsersService {
   }
 
   // Вспомогательная функция
-  private async getUserByEmail(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<User> {
     return this.prisma.user.findFirst({
       where: { email },
     })
