@@ -2,6 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: ID!
+  email: String!
+  password: String!
+  roles: [String!]!
+  mainDirectory: String!
+  accessToken: String
+}
+
+type DeleteUserEntity {
+  status: String!
+}
+
 type AccessToken {
   accessToken: String!
 }
@@ -11,8 +24,13 @@ type Query {
 }
 
 type Mutation {
-  RegisterUser(RegisterUserInput: CreateUserDto!): AccessToken!
+  DeleteUser(DeleteUserInput: DeleteUserDto!): DeleteUserEntity!
+  RegisterUser(RegisterUserInput: CreateUserDto!): User!
   LoginUser(LoginUserInput: CreateUserDto!): AccessToken!
+}
+
+input DeleteUserDto {
+  email: String!
 }
 
 input CreateUserDto {

@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { UsersService } from '../users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { CreateUserDto } from '../users/dto/create.dto'
-import { User } from '../users/user.entity'
+import { User } from '../users/entity/user.entity'
 import { AccessToken } from './entity/token.entity'
 import { compareSync } from 'bcrypt'
 
@@ -11,13 +11,14 @@ export class AuthService {
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
+    //private readonly filesService: FilesService,
   ) {}
 
-  async registerNewUser(dto: CreateUserDto): Promise<AccessToken> {
+  async registerNewUser(dto: CreateUserDto): Promise<User> {
     const user: User = await this.users.saveNewUser(dto)
     if (user) {
-      const accessToken: string = this.generateAccessToken(user)
-      return { accessToken }
+      user.accessToken = this.generateAccessToken(user)
+      return user
     } else {
       return null
     }

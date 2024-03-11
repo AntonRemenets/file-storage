@@ -14,6 +14,9 @@ export class UserPayload {
   @Field(() => [String])
   roles: string[]
 
+  @Field(() => String)
+  mainDirectory: string
+
   @Field(() => String, { nullable: true })
   accessToken?: string
 }
