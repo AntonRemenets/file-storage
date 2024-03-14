@@ -4,8 +4,9 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { UsersModule } from './users/users.module'
 import { join } from 'path'
-import { AuthModule } from './auth/auth.module';
-import { FilesModule } from './files/files.module';
+import { AuthModule } from './auth/auth.module'
+import { FilesModule } from './files/files.module'
+import { UploadFileModule } from './upload/upload.module'
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { FilesModule } from './files/files.module';
     UsersModule,
     AuthModule,
     FilesModule,
+    UploadFileModule,
   ],
 })
 export class AppModule {}

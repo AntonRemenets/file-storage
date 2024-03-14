@@ -4,7 +4,7 @@ import { AuthService } from './auth.service'
 import { AccessToken } from './entity/token.entity'
 import { User } from '../users/entity/user.entity'
 
-@Resolver('Auth')
+@Resolver()
 export class AuthResolver {
   constructor(private readonly auth: AuthService) {}
 

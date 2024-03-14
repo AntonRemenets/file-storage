@@ -27,11 +27,15 @@ export class FilesService {
   }
 
   // Удаление домашнего католога
-  async removeMainDirectory(dirName: string) {
+  async removeMainDirectory(dirName: string): Promise<boolean> {
     const dirPath: string = path.join(MAIN_DIR(), dirName)
     fs.rm(dirPath, { recursive: true, force: true }, err => {
       if (err) throw err
     })
     return true
   }
+
+  // Загрузка файлов
+  // Осуществляем через REST API
+  async uploadFiles() {}
 }
