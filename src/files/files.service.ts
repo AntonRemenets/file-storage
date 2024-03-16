@@ -4,7 +4,7 @@ import * as process from 'process'
 import * as fs from 'fs'
 import { v4 as uuidv4 } from 'uuid'
 
-const MAIN_DIR = () => {
+export const MAIN_DIR = () => {
   const dir = path.resolve(process.cwd(), 'root')
   if (fs.existsSync(dir)) {
     return dir
