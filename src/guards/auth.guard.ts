@@ -7,6 +7,7 @@ import {
 import { Observable } from 'rxjs'
 import { Request } from 'express'
 import { JwtService } from '@nestjs/jwt'
+import { User } from '../users/entity/user.entity'
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -21,8 +22,11 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException()
     }
     try {
-      const payload = this.jwt.verify(token, { secret: process.env.JWT_SECRET })
-      console.log(payload)
+      const payload: Partial<User> = this.jwt.verify(token, {
+        secret: process.env.JWT_SECRET,
+      })
+      //console.log(payload)
+      request['user'] = payload
     } catch {
       throw new UnauthorizedException()
     }
