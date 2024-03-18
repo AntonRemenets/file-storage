@@ -8,6 +8,7 @@ export const fileStorage = diskStorage({
     cb(null, destination)
   },
   filename: function (req, file, cb) {
+    file.originalname = Buffer.from(file.originalname, 'utf8').toString('utf8')
     cb(null, file.originalname)
   },
 })
