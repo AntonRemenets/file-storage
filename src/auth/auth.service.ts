@@ -38,6 +38,7 @@ export class AuthService {
     return (
       'Bearer ' +
       this.jwt.sign({
+        id: user.id,
         email: user.email,
         roles: user.roles,
         mainDirectory: user.mainDirectory,

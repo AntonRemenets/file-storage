@@ -28,6 +28,7 @@ model User {
 model File {
   id        Int      @id @default(autoincrement())
   fileName  String   @map("file_name")
+  path      String
   fileSize  Int      @map("file_size")
   createdAt DateTime @default(now()) @map("created_at")
   User      User?    @relation(fields: [userId], references: [id])
