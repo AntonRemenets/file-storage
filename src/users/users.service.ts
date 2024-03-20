@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { PrismaService } from '../services/prisma/prisma.service'
 import { CreateUserDto } from './dto/create.dto'
@@ -59,7 +60,19 @@ export class UsersService {
   }
 
   // Информация о пользователе
-  async aboutMe() {}
+  async aboutMe(id: number): Promise<User> {
+    if (!id) {
+      throw new UnauthorizedException('Не авторизован')
+    }
+    try {
+      return this.prisma.user.findUnique({
+        where: { id },
+        include: { files: true },
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   // Удаление пользователя
   async deleteUser(dto: DeleteUserDto): Promise<DeleteUserEntity> {

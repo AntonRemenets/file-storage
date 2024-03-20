@@ -20,6 +20,7 @@ type AccessToken {
 }
 
 type Query {
+  aboutMe: User!
   sayHello: String!
 }
 

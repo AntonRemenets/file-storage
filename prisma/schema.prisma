@@ -31,7 +31,7 @@ model File {
   path      String
   fileSize  Int      @map("file_size")
   createdAt DateTime @default(now()) @map("created_at")
-  User      User?    @relation(fields: [userId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int?     @map("user_id")
 
   @@map("files")
