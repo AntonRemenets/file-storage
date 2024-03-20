@@ -58,6 +58,9 @@ export class UsersService {
     }
   }
 
+  // Информация о пользователе
+  async aboutMe() {}
+
   // Удаление пользователя
   async deleteUser(dto: DeleteUserDto): Promise<DeleteUserEntity> {
     const user = await this.getUserByEmail(dto.email)

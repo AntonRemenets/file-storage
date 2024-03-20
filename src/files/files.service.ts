@@ -39,7 +39,10 @@ export class FilesService {
   }
 
   // Сохранение файлов в базе данных
-  async saveFiles(file: Express.Multer.File, req: any) {
+  async saveFiles(file: Express.Multer.File, req: any): Promise<string> {
+    if (await this.findDuplicateFile(file, req)) {
+      return file.path
+    }
     try {
       await this.prisma.file.create({
         data: {
@@ -50,7 +53,7 @@ export class FilesService {
         },
       })
 
-      return { file: file.path }
+      return file.path
     } catch (e) {
       console.log(e)
       return null
@@ -65,5 +68,15 @@ export class FilesService {
     } catch (e) {
       throw new InternalServerErrorException()
     }
+  }
+
+  async findDuplicateFile(file: Express.Multer.File, req: any) {
+    return this.prisma.file.findFirst({
+      where: {
+        fileName: file.originalname,
+        fileSize: file.size,
+        userId: req.user.id,
+      },
+    })
   }
 }

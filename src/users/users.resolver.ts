@@ -14,4 +14,9 @@ export class UsersResolver {
   ): Promise<DeleteUserEntity> {
     return this.usersService.deleteUser(dto)
   }
+
+  // Информация о пользователе
+  async aboutMe() {
+    return this.usersService.aboutMe()
+  }
 }
