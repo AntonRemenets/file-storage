@@ -10,8 +10,8 @@ import * as bcrypt from 'bcrypt'
 import { genSaltSync } from 'bcrypt'
 import { Role, User } from './entity/user.entity'
 import { FilesService } from '../files/files.service'
-import { DeleteUserDto } from './dto/delete.dto'
 import { DeleteUserEntity } from './entity/deleteUser.entity'
+import { RequestPayload } from '../middleware/request.interface'
 
 @Injectable()
 export class UsersService {
@@ -75,16 +75,29 @@ export class UsersService {
   }
 
   // Удаление пользователя
-  async deleteUser(dto: DeleteUserDto): Promise<DeleteUserEntity> {
-    const user = await this.getUserByEmail(dto.email)
-    if (!user) {
+  async deleteUser(
+    request: RequestPayload,
+    password: string,
+  ): Promise<DeleteUserEntity> {
+    if (!request.user) {
+      throw new UnauthorizedException()
+    }
+    const _user: User = await this.getUserByEmail(request.user.email)
+    if (!_user) {
       throw new BadRequestException('Пользователь не найден')
     }
-    const rmDir = await this.files.removeMainDirectory(user.mainDirectory)
+    const result: boolean = bcrypt.compareSync(password, _user.password)
+    if (!result) {
+      return { status: 'Неправильный пароль' }
+    }
+    const rmDir = await this.files.removeMainDirectory(
+      request.user.mainDirectory,
+    )
     if (rmDir) {
       await this.prisma.user.delete({
-        where: { id: user.id },
+        where: { id: request.user.id },
       })
+      request['user'] = undefined
       return { status: 'Пользователь удален' }
     } else {
       return { status: 'Что-то пошло не так' }

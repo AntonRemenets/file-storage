@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
@@ -7,6 +7,8 @@ import { join } from 'path'
 import { AuthModule } from './auth/auth.module'
 import { FilesModule } from './files/files.module'
 import { UploadFileModule } from './upload/upload.module'
+import { JwtModule } from '@nestjs/jwt'
+import { RequestMiddleware } from './middleware/request.middleware'
 
 @Module({
   imports: [
@@ -18,9 +20,15 @@ import { UploadFileModule } from './upload/upload.module'
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: false,
       path: 'api',
+      context: ({ req, res }) => ({ req, res }),
       buildSchemaOptions: {
         numberScalarMode: 'integer',
       },
+    }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: process.env.EXPIRES_IN },
     }),
     UsersModule,
     AuthModule,
@@ -28,4 +36,8 @@ import { UploadFileModule } from './upload/upload.module'
     UploadFileModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestMiddleware).forRoutes('*')
+  }
+}

@@ -1,25 +1,29 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { UsersService } from './users.service'
-import { DeleteUserDto } from './dto/delete.dto'
 import { DeleteUserEntity } from './entity/deleteUser.entity'
-import { Me } from '../decorators/me.decorator'
 import { User } from './entity/user.entity'
+import { RequestPayload } from '../middleware/request.interface'
+import { DeleteUserDto } from './dto/delete.dto'
+import { UsePipes, ValidationPipe } from '@nestjs/common'
 
 @Resolver()
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   // Удаление пользователя
+  @UsePipes(new ValidationPipe())
   @Mutation(() => DeleteUserEntity, { name: 'DeleteUser' })
   async deleteUser(
-    @Args('DeleteUserInput') dto: DeleteUserDto,
-  ): Promise<DeleteUserEntity> {
-    return this.usersService.deleteUser(dto)
+    @Args('PasswordInput') dto: DeleteUserDto,
+    @Context('req') request: RequestPayload,
+  ) {
+    console.log(request.user)
+    return this.usersService.deleteUser(request, dto.password)
   }
 
   // Информация о пользователе
   @Query(() => User)
-  async aboutMe(@Me() id: number): Promise<User> {
-    return this.usersService.aboutMe(id)
+  async getInformationAboutMe(@Context('req') request: RequestPayload) {
+    return this.usersService.aboutMe(request.user.id)
   }
 }

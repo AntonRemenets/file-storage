@@ -20,18 +20,18 @@ type AccessToken {
 }
 
 type Query {
-  aboutMe: User!
+  getInformationAboutMe: User!
   sayHello: String!
 }
 
 type Mutation {
-  DeleteUser(DeleteUserInput: DeleteUserDto!): DeleteUserEntity!
+  DeleteUser(PasswordInput: DeleteUserDto!): DeleteUserEntity!
   RegisterUser(RegisterUserInput: CreateUserDto!): User!
   LoginUser(LoginUserInput: CreateUserDto!): AccessToken!
 }
 
 input DeleteUserDto {
-  email: String!
+  password: String!
 }
 
 input CreateUserDto {

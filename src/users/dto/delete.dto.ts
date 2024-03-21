@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { IsEmail, IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 @InputType()
 export class DeleteUserDto {
   @Field()
-  @IsEmail()
+  @IsString()
   @IsNotEmpty()
-  email: string
+  password: string
 }
