@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { FileEntity } from '../../files/entity/file.entity'
 
 export enum Role {
   ADMIN = 'ADMIN',
@@ -24,4 +25,7 @@ export class User {
 
   @Field(() => String, { nullable: true })
   accessToken?: string
+
+  @Field(() => [FileEntity], { nullable: true })
+  files?: FileEntity[]
 }

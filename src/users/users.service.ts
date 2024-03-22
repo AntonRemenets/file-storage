@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common'
 import { PrismaService } from '../services/prisma/prisma.service'
 import { CreateUserDto } from './dto/create.dto'
@@ -60,10 +59,7 @@ export class UsersService {
   }
 
   // Информация о пользователе
-  async aboutMe(id: number): Promise<User> {
-    if (!id) {
-      throw new UnauthorizedException('Не авторизован')
-    }
+  async aboutMe(id: number) {
     try {
       return this.prisma.user.findUnique({
         where: { id },
@@ -79,9 +75,6 @@ export class UsersService {
     request: RequestPayload,
     password: string,
   ): Promise<DeleteUserEntity> {
-    if (!request.user) {
-      throw new UnauthorizedException()
-    }
     const _user: User = await this.getUserByEmail(request.user.email)
     if (!_user) {
       throw new BadRequestException('Пользователь не найден')

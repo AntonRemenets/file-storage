@@ -4,6 +4,8 @@ import * as process from 'process'
 import * as fs from 'fs'
 import { v4 as uuidv4 } from 'uuid'
 import { PrismaService } from '../services/prisma/prisma.service'
+import { RequestPayload } from '../middleware/request.interface'
+import { FileEntity } from './entity/file.entity'
 
 export const MAIN_DIR = () => {
   const dir = path.resolve(process.cwd(), 'root')
@@ -39,8 +41,11 @@ export class FilesService {
   }
 
   // Сохранение файлов в базе данных
-  async saveFiles(file: Express.Multer.File, req: any): Promise<string> {
-    if (await this.findDuplicateFile(file, req)) {
+  async saveFiles(
+    file: Express.Multer.File,
+    request: RequestPayload,
+  ): Promise<string> {
+    if (await this.findDuplicateFile(file, request)) {
       return file.path
     }
     try {
@@ -49,7 +54,7 @@ export class FilesService {
           fileName: file.originalname,
           path: file.path,
           fileSize: file.size,
-          userId: req.user.id,
+          userId: request.user.id,
         },
       })
 
@@ -70,12 +75,15 @@ export class FilesService {
     }
   }
 
-  async findDuplicateFile(file: Express.Multer.File, req: any) {
+  async findDuplicateFile(
+    file: Express.Multer.File,
+    request: RequestPayload,
+  ): Promise<Partial<FileEntity>> {
     return this.prisma.file.findFirst({
       where: {
         fileName: file.originalname,
         fileSize: file.size,
-        userId: req.user.id,
+        userId: request.user.id,
       },
     })
   }

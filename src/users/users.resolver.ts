@@ -4,7 +4,7 @@ import { DeleteUserEntity } from './entity/deleteUser.entity'
 import { User } from './entity/user.entity'
 import { RequestPayload } from '../middleware/request.interface'
 import { DeleteUserDto } from './dto/delete.dto'
-import { UsePipes, ValidationPipe } from '@nestjs/common'
+import { UnauthorizedException, UsePipes, ValidationPipe } from '@nestjs/common'
 
 @Resolver()
 export class UsersResolver {
@@ -16,14 +16,19 @@ export class UsersResolver {
   async deleteUser(
     @Args('PasswordInput') dto: DeleteUserDto,
     @Context('req') request: RequestPayload,
-  ) {
-    console.log(request.user)
+  ): Promise<DeleteUserEntity> {
+    if (!request.user) {
+      throw new UnauthorizedException()
+    }
     return this.usersService.deleteUser(request, dto.password)
   }
 
   // Информация о пользователе
   @Query(() => User)
   async getInformationAboutMe(@Context('req') request: RequestPayload) {
+    if (!request.user) {
+      throw new UnauthorizedException()
+    }
     return this.usersService.aboutMe(request.user.id)
   }
 }

@@ -9,7 +9,7 @@ export class FileEntity {
   fileSize: number
 
   @Field(() => Date)
-  uploadedAt: Date
+  createdAt: Date
 
   @Field(() => String)
   path: string
