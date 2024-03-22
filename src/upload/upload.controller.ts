@@ -1,5 +1,6 @@
 import {
   Controller,
+  InternalServerErrorException,
   Post,
   Req,
   UnauthorizedException,
@@ -32,6 +33,9 @@ export class UploadFileController {
   ): Promise<string> {
     if (!request.user) {
       throw new UnauthorizedException()
+    }
+    if (!file) {
+      throw new InternalServerErrorException()
     }
     return await this.files.saveFiles(file, request)
   }

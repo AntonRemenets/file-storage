@@ -65,6 +65,7 @@ export class FilesService {
     }
   }
 
+  // Вернуть количество файлов у пользователя
   async getFilesCount(userId: number): Promise<number> {
     try {
       return await this.prisma.file.count({
@@ -75,6 +76,7 @@ export class FilesService {
     }
   }
 
+  // Поиск дубликата файла
   async findDuplicateFile(
     file: Express.Multer.File,
     request: RequestPayload,
@@ -86,5 +88,10 @@ export class FilesService {
         userId: request.user.id,
       },
     })
+  }
+
+  // Вернуть список файлов пользователя
+  async getUserFiles(userId: number) {
+    return this.prisma.file.findMany({ where: { userId } })
   }
 }

@@ -9,6 +9,7 @@ import { FilesModule } from './files/files.module'
 import { UploadFileModule } from './upload/upload.module'
 import { JwtModule } from '@nestjs/jwt'
 import { RequestMiddleware } from './middleware/request.middleware'
+import { DownloadFileModule } from './download/download.module'
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { RequestMiddleware } from './middleware/request.middleware'
     AuthModule,
     FilesModule,
     UploadFileModule,
+    DownloadFileModule,
   ],
 })
 export class AppModule implements NestModule {
