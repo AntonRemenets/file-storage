@@ -15,7 +15,7 @@ import * as process from 'process'
 import { MaxFilesCount } from '../guards/files.guard'
 import { RequestPayload } from '../middleware/request.interface'
 
-@Controller('files')
+@Controller()
 export class UploadFileController {
   constructor(private readonly files: FilesService) {}
 

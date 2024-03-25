@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Param,
-  Post,
   Req,
   Res,
   UnauthorizedException,
@@ -15,18 +14,17 @@ import { Response } from 'express'
 export class DownloadFileController {
   constructor(private readonly download: DownloadFileService) {}
 
-  @Post(':id')
+  @Get(':id')
   async getFileById(
     @Param('id') id: number,
     @Req() request: RequestPayload,
     @Res() response: Response,
   ) {
-    console.log(id)
     if (!request.user) {
       throw new UnauthorizedException()
     }
 
-    return this.download.getFileById(id, request, response)
+    return this.download.getFileById(Number(id), request, response)
   }
 
   @Get()
