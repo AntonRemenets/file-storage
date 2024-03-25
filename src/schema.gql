@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 type FileEntity {
+  id: Int!
   fileName: String!
   fileSize: Int!
   createdAt: DateTime!

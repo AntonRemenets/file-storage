@@ -2,6 +2,9 @@ import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class FileEntity {
+  @Field(() => Number)
+  id: number
+
   @Field(() => String)
   fileName: string
 
