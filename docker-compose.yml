@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  fileserver:
+    image: fileserver
+    ports:
+      - 5150:5150
+    networks:
+      - dbs_network
+
+networks:
+  dbs_network:
+    name: startdbs_default
+    external: true
