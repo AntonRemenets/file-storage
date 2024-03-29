@@ -10,9 +10,14 @@ import { UploadFileModule } from './upload/upload.module'
 import { JwtModule } from '@nestjs/jwt'
 import { RequestMiddleware } from './middleware/request.middleware'
 import { DownloadFileModule } from './download/download.module'
+import { ServeStaticModule } from '@nestjs/serve-static'
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
