@@ -8,8 +8,8 @@ services:
     networks:
       - dbs_network
     volumes:
-      - ./root:/app
-      - ./public:/app
+      - ./root:/app/root
+      - ./public:/app/public
     restart: always
 
 networks:
